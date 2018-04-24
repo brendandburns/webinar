@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: git-sync 
+spec:
+  containers:
+  - name: server 
+    image: brendanburns/node-sync 
+    volumeMounts:
+    - name: source 
+      mountPath: /src
+  - name: sync
+    image: brendanburns/git-sync:v1
+    volumeMounts:
+    - name: source
+      mountPath: /src
+  initContainers:
+  - name: init-myservice
+    image: brendanburns/git-sync:v1
+    command:
+    - /clone.sh
+    volumeMounts:
+    - name: source
+      mountPath: /src
+  volumes:
+  - name: source 
+    emptyDir: {}

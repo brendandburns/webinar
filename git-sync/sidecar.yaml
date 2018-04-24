@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: server 
-    image: brendanburns/node-sync 
+    image: brendanburns/node-server:v1
     volumeMounts:
     - name: source 
       mountPath: /src

@@ -1,10 +1,6 @@
 #!/bin/bash
 
-mkdir -p /src
-cd /src
-git clone https://github.com/brendandburns/webinar
-
-cd webinar
+cd /src/webinar
 
 while true; do
    git fetch origin

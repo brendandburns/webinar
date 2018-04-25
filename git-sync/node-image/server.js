@@ -1,7 +1,7 @@
 const http = require('http');
 const port = 8080;
 const server = http.createServer((req, res) => {
-    res.end('This is a simple container demo');
+    res.end('This is a simple demo');
 });
 
 server.listen(port, (err) => {

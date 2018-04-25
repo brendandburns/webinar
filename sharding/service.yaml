@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: serving-layer
+spec:
+  selector:
+    matchLabels:
+      app: serving-layer
+  serviceName: "serving"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: serving-layer
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: server
+        image: brendanburns/hostname-server:v1
+        ports:
+        - containerPort: 8080
+          name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serving
+  labels:
+    app: serving-layer
+spec:
+  ports:
+  - port: 8080
+    name: web
+  clusterIP: None
+  selector:
+    app: serving-layer

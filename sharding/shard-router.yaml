@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routing-layer
+spec:
+  selector:
+    matchLabels:
+      app: "routing-layer"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: routing-layer
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: router
+        image: brendanburns/sharder
+        ports:
+        - containerPort: 8080
+          name: web
+        env:
+        - name: SHARD_ADDRESSES
+          value: "serving-layer-0.serving:8080,serving-layer-1.serving:8080,serving-layer-2.serving:8080"
+        - name: SERVER_ADDRESS
+          value: "0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: router-service
+  labels:
+    app: routing-layer
+spec:
+  ports:
+  - port: 8080
+    name: web
+  clusterIP: None
+  selector:
+    app: routing-layer
